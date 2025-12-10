@@ -14,7 +14,7 @@ tags = [
 image="RN基础.png"
 +++
 
-# React Native 核心基础篇
+# React Native 核心基础篇 壹
 
 >   本篇博客搬运 **极客时间 蒋宏伟 老师的课程** [原文点我](https://time.geekbang.org/column/intro/100110101?code=FAqHFVRUur%25252FgAP-yJQWitk9ieF80imRky3PVsIs%25252FX6A%25253D&tab=catalog) 侵权联系网站博主删除。
 
