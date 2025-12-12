@@ -19,7 +19,7 @@ categories = [
 tags = [
     "Android",
     "RN",
-    "Test_Categoties",
+    "Test_Tags",
 ]
 
 +++
