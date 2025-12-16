@@ -9,12 +9,13 @@ categories = [
     "RN",
 ]
 tags = [
-    "Android",
     "RN",
 ]
 image="RN基础.png"
 +++
 # React Native 核心基础篇 贰
+
+>   本篇博客搬运 **极客时间 蒋宏伟 老师的课程** [原文点我](https://time.geekbang.org/column/intro/100110101?code=FAqHFVRUur%25252FgAP-yJQWitk9ieF80imRky3PVsIs%25252FX6A%25253D&tab=catalog) 侵权联系网站博主删除。
 
 ## 06｜Pressable：如何实现一个体验好的点按组件？
 
@@ -816,7 +817,7 @@ rowRenderer 的对应代码，我也放在了这里，你可以对照查看：
 
 最后，我们总结一下今天这节课所讲的重点：
 
-1.   滚动组件 ScrollView 是列表组件 FlastList 和 RecyclerListView 的底层实现，ScrollView 的绝大部分属性在 FlastList 和 RecyclerListView 上都有；
+1.   滚动组件 ScrollView 是列表组件 FlatList 和 RecyclerListView 的底层实现，ScrollView 的绝大部分属性在 FlastList 和 RecyclerListView 上都有；
 2.   从按需渲染的可视区域的大小和对底层 UI 视图的操作方式上分析，RecyclerListView 比 FlastList 的内存更少，在 UI 线程的计算量也更少；
 3.   为了让你的无限列表性能更好，我推荐你优先使用 RecyclerListView，然后才是 FlastList。
 

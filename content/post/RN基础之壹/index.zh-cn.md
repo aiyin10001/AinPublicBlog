@@ -8,7 +8,6 @@ categories = [
     "RN",
 ]
 tags = [
-    "Android",
     "RN",
 ]
 image="RN基础.png"
