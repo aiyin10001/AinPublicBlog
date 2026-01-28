@@ -191,3 +191,177 @@ image="tu.png"
 
 -   [0048. 旋转图像 - 力扣](https://leetcode.cn/problems/rotate-image/)
 
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/01/28 10:11
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/rotate-image/description/
+     * 题目：48. 旋转图像
+     * 难度：medium
+     * Thinking：_6_min
+     * Coding:_10_min
+     * 思路：计算(i,j)下标旋转后的位置
+     */
+    public class Lc0048 {
+        public void rotate(int[][] matrix) {
+            int tmp = 0;
+            int n = matrix.length;
+            for (int i = 0; i < n / 2; i++) {
+                for (int j = i; j < n - 1 - i; j++) {
+                    int i0 = i;
+                    int j0 = j;
+                    int i1 = j0;
+                    int j1 = n - 1 - i0;
+                    int i2 = j1;
+                    int j2 = n - 1 - i1;
+                    int i3 = j2;
+                    int j3 = n - 1 - i2;
+                    tmp = matrix[i0][j0];
+                    matrix[i0][j0] = matrix[i3][j3];
+                    matrix[i3][j3] = matrix[i2][j2];
+                    matrix[i2][j2] = matrix[i1][j1];
+                    matrix[i1][j1] = tmp;
+                }
+            }
+        }
+    }
+    ```
+
+    **思路 2：原地翻转**
+
+    通过观察可以得出：原矩阵可以通过一次「水平翻转」+「主对角线翻转」得到旋转后的二维矩阵。
+
+    这种思路没有想到
+
+
+-   [0054. 螺旋矩阵 - 力扣](https://leetcode.cn/problems/spiral-matrix/)
+
+    ```java
+    package org.lc;
+    
+    import java.util.ArrayList;
+    import java.util.List;
+    
+    /**
+     * 创建时间: 2026/01/28 10:29
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/spiral-matrix/description/
+     * 题目：54. 螺旋矩阵
+     * 难度：medium
+     * Thinking：_5_min
+     * Coding:_6_min
+     * 思路：边界指针+状态机转换
+     */
+    public class Lc0054 {
+        public List<Integer> spiralOrder(int[][] matrix) {
+            int cntState = 0;
+            int l = 0;
+            int t = 0;
+            int r = matrix[0].length - 1;
+            int b = matrix.length - 1;
+            List<Integer> res = new ArrayList<>();
+            while (l <= r && t <= b) {
+                switch (cntState) {
+                    case 0: {
+                        for (int j = l; j <= r; j++) {
+                            res.add(matrix[t][j]);
+                        }
+                        t++;
+                        break;
+                    }
+                    case 1: {
+                        for (int i = t; i <= b; i++) {
+                            res.add(matrix[i][r]);
+                        }
+                        r--;
+                        break;
+                    }
+                    case 2: {
+                        for (int j = r; j >= l; j--) {
+                            res.add(matrix[b][j]);
+                        }
+                        b--;
+                        break;
+                    }
+                    case 3: {
+                        for (int i = b; i >= t; i--) {
+                            res.add(matrix[i][l]);
+                        }
+                        l++;
+                        break;
+                    }
+                }
+                cntState = (cntState + 1) % 4;
+            }
+            return res;
+        }
+    }
+    ```
+
+-   [0498. 对角线遍历 - 力扣](https://leetcode.cn/problems/diagonal-traverse/)
+
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/01/28 10:50
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/diagonal-traverse/description/
+     * 题目：498. 对角线遍历
+     * 难度：medium
+     * Thinking：_10_min
+     * Coding:_20_min
+     * 思路：两个状态，一个是向右上，一个向左下，注意边界条件即可。
+     * 卡点：卡在了边界分析上。
+     */
+    public class Lc0498 {
+        public int[] findDiagonalOrder(int[][] mat) {
+            int m = mat.length;
+            int n = mat[0].length;
+            int[] ans = new int[m * n];
+            boolean isRightUp = true;
+            int loop = m + n - 2;
+            int i = 0, j = 0, l = 0;
+            for (int k = 0; k <= loop; k++) {
+                if (isRightUp) {
+                    while (i >= 0 && i <= m - 1 && j >= 0 && j <= n - 1) {
+                        ans[l] = mat[i][j];
+                        i--;
+                        j++;
+                        l++;
+                    }
+                    if (j > n - 1) {
+                        j = n - 1;
+                        i = i + 2;
+                    } else {
+                        i = 0;
+                    }
+                } else {
+                    while (i >= 0 && i <= m - 1 && j >= 0 && j <= n - 1) {
+                        ans[l] = mat[i][j];
+                        l++;
+                        i++;
+                        j--;
+                    }
+                    if (i > m - 1) {
+                        i = m - 1;
+                        j = j + 2;
+                    } else {
+                        j = 0;
+                    }
+                }
+                isRightUp = !isRightUp;
+            }
+            return ans;
+        }
+    }
+    ```
+
+-   
+
+-   
+
+-   
+
