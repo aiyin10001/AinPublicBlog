@@ -1,4 +1,4 @@
-# AinDevelopBlog
+# AinPublicBlog
 
 my public blog
 
