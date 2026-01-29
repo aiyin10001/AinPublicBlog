@@ -643,6 +643,265 @@ image="tu.png"
 
 ## 数组排序
 
+### 冒泡排序
+
+```java
+    /**
+     * 冒泡排序
+     */
+    public void bubbleSort(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            boolean tmp = false;
+            for (int j = 0; j < nums.length - i - 1; j++) {
+                if (nums[j] > nums[j + 1]) {
+                    int t = nums[j];
+                    nums[j] = nums[j + 1];
+                    nums[j + 1] = t;
+                    tmp = true;
+                }
+            }
+            if (!tmp) break;
+        }
+    }
+```
+
+### 选择排序
+
+```java
+    /**
+     * 选择排序
+     */
+    public void selectionSort(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            int cntMin = nums[i];
+            int cntIndex = i;
+            for (int j = i; j < nums.length; j++) {
+                if (cntMin > nums[j]) {
+                    cntMin = nums[j];
+                    cntIndex = j;
+                }
+            }
+            var tmp = nums[i];
+            nums[i] = nums[cntIndex];
+            nums[cntIndex] = tmp;
+        }
+    }
+```
+
+### 插入排序
+
+```java
+    /**
+     * 插入排序
+     */
+    public void insertionSort(int[] nums) {
+        for (int i = 1; i < nums.length; i++) {
+            for (int j = i; j > 0; j--) {
+                if (nums[j] < nums[j - 1]) {
+                    var tmp = nums[j];
+                    nums[j] = nums[j - 1];
+                    nums[j - 1] = tmp;
+                }
+            }
+        }
+    }
+```
+
+### 希尔排序
+
+```java
+    /**
+     * 希尔排序
+     */
+    public void shellSort(int[] nums) {
+        int gap = nums.length / 2;
+        while (gap > 0) {
+            for (int i = gap; i < nums.length; i++) {
+                for (int j = i; j > 0; j -= gap) {
+                    if (j - gap >= 0 && nums[j] < nums[j - gap]) {
+                        var tmp = nums[j];
+                        nums[j] = nums[j - gap];
+                        nums[j - gap] = tmp;
+                    }
+                }
+            }
+            gap = gap / 2;
+        }
+    }
+```
+
+### 归并排序
+
+``` java
+    /**
+     * 归并排序
+     */
+    public int[] mergeSort(int[] nums, int l, int r) {
+        if (l >= r) return new int[]{nums[l]};
+        int mid = (l + r) / 2;
+        var left = mergeSort(nums, l, mid);
+        var right = mergeSort(nums, mid + 1, r);
+        return merge(left, right);
+    }
+
+    private int[] merge(int[] left, int[] right) {
+        var lSize = left.length;
+        var rSize = right.length;
+        var ans = new int[lSize + rSize];
+        var l = 0;
+        var r = 0;
+        var i = 0;
+        while (l < lSize && r < rSize) {
+            if (left[l] <= right[r]) {
+                ans[i] = left[l];
+                i++;
+                l++;
+            } else {
+                ans[i] = right[r];
+                i++;
+                r++;
+            }
+        }
+
+        if (l >= lSize) {
+            while (r < rSize) {
+                ans[i] = right[r];
+                i++;
+                r++;
+            }
+        } else {
+            while (l < lSize) {
+                ans[i] = left[l];
+                i++;
+                l++;
+            }
+        }
+        return ans;
+    }
+```
+
+### 快速排序
+
+```java
+    /**
+     * 快速排序
+     */
+    public void quickSort(int[] nums, int l, int r) {
+        if (l >= r) return;
+        var p = partition(nums, l, r);
+        quickSort(nums, l, p - 1);
+        quickSort(nums, p + 1, r);
+    }
+
+    private int partition(int[] nums, int l, int r) {
+        var key = nums[l];
+        while (l < r) {
+            while (key <= nums[r] && l < r) r--;
+            nums[l] = nums[r];
+            while (key >= nums[l] && l < r) l++;
+            nums[r] = nums[l];
+        }
+        nums[l] = key;
+        return l;
+    }
+```
+
+### 堆排序
+
+```java
+    /**
+     * 堆排序
+     */
+    public void maxHeapSort(int[] nums, int l, int r) {
+        buildMaxHeap(nums, l, r);
+        for (int i = 0; i <= r; i++) {
+            var tmp = nums[0];
+            nums[0] = nums[r - i];
+            nums[r - i] = tmp;
+            shiftMaxHeap(nums, l, r - i - 1);
+        }
+    }
+
+    public void buildMaxHeap(int[] nums, int l, int r) {
+        int target = (l + r) / 2;
+        for (; target >= 0; target--) {
+            shiftMaxHeap(nums, target, r);
+        }
+    }
+
+    public void shiftMaxHeap(int[] nums, int l, int r) {
+        var i = l;
+        while (i < r) {
+            var k = 2 * (i + 1) - 1;
+            if (k + 1 <= r && nums[k] < nums[k + 1]) k = k + 1;
+            if (k <= r && nums[i] < nums[k]) {
+                var tmp = nums[i];
+                nums[i] = nums[k];
+                nums[k] = tmp;
+                i = k;
+            } else {
+                break;
+            }
+        }
+    }
+```
+
+### 计数排序
+
+```java
+    /**
+     * 计数排序
+     **/
+    public void countingSort(int[] nums) {
+        var min = nums[0];
+        var max = nums[0];
+        for (int i = 0; i < nums.length; i++) {
+            min = Math.min(min, nums[i]);
+            max = Math.max(max, nums[i]);
+        }
+        var range = max - min;
+        int[] count = new int[range + 1];
+        for (int num : nums) {
+            count[num - min] += 1;
+        }
+        int k = 0;
+        for (int i = 0; i < count.length; i++) {
+            while (count[i] > 0) {
+                nums[k] = i + min;
+                k++;
+                count[i]--;
+            }
+        }
+    }
+```
+
+### 桶排序
+
+```java
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 -   
