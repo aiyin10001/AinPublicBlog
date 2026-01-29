@@ -15,7 +15,7 @@ image="tu.png"
 
 # 数组 Part 1
 
-## 数组基础
+## 数组基础 （一维数组、二维数组）
 
 - [0066. 加一 - 力扣](https://leetcode.cn/problems/plus-one/)
 
@@ -359,9 +359,295 @@ image="tu.png"
     }
     ```
 
--   
+-   [485. 最大连续 1 的个数](https://leetcode.cn/problems/max-consecutive-ones/)
+
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/01/29 10:06
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/max-consecutive-ones/description/
+     * 题目：485. 最大连续 1 的个数
+     * 难度：easy
+     * Thinking：_1_min
+     * Coding:_2_min
+     * 思路：记录当前最值，和已知最值比较更新
+     * 卡点：
+     */
+    public class Lc0485 {
+        public int findMaxConsecutiveOnes(int[] nums) {
+            int ans = 0;
+            int tmp = -1;
+            for (int i = 0; i < nums.length; i++) {
+                if (nums[i] == 1) {
+                    if (tmp == -1) {
+                        tmp = 1;
+                    } else {
+                        tmp++;
+                    }
+                } else {
+                    if (tmp > 0) {
+                        ans = Math.max(ans, tmp);
+                        tmp = -1;
+                    }
+                }
+            }
+            if (tmp > 0) {
+                ans = Math.max(ans, tmp);
+            }
+            return ans;
+        }
+    }
+    ```
+
+-   [238. 除了自身以外数组的乘积](https://leetcode.cn/problems/product-of-array-except-self/)
+
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/01/29 10:15
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/product-of-array-except-self/
+     * 题目：238. 除了自身以外数组的乘积
+     * 难度：medium
+     * Thinking：_∞_min
+     * Coding:_4_min
+     * 思路：左遍历一次，ans先存放前缀积，右遍历一次时把后缀积乘上去
+     * 卡点：没想到反着遍历一次后缀和
+     */
+    public class Lc0238 {
+        public int[] productExceptSelf(int[] nums) {
+            int[] ans = new int[nums.length];
+            ans[0] = 1;
+            for (int i = 1; i < nums.length; i++) {
+                ans[i] = ans[i - 1] * nums[i - 1];
+            }
+            int tmp = 1;
+            for (int i = nums.length - 2; i >= 0; i--) {
+                tmp = tmp * nums[i + 1];
+                ans[i] = ans[i] * tmp;
+            }
+            return ans;
+        }
+    }
+    ```
+
+-   [73. 矩阵置零](https://leetcode.cn/problems/set-matrix-zeroes/)
+
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/01/29 10:39
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/set-matrix-zeroes/description/
+     * 题目：73. 矩阵置零
+     * 难度：medium
+     * Thinking：_4_min
+     * Coding:__min
+     * 思路：用m和n数组分别记录值为0的坐标，然后根据坐标刷新数组。但是空间复杂度时O(m+n)，没有达到O(1)。
+     * 卡点：没想到怎么用常数阶空间复杂度解题。
+     */
+    public class Lc0073 {
+        public void setZeroes(int[][] matrix) {
+            int m = matrix.length;
+            int n = matrix[0].length;
+            int[] x = new int[m];
+            int[] y = new int[n];
+    
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (matrix[i][j] == 0) {
+                        x[i] = 1;
+                        y[j] = 1;
+                    }
+                }
+            }
+    
+            for (int i = 0; i < m; i++) {
+                if (x[i] == 1) {
+                    for (int j = 0; j < n; j++) {
+                        matrix[i][j] = 0;
+                    }
+                }
+            }
+    
+            for (int j = 0; j < n; j++) {
+                if (y[j] == 1) {
+                    for (int i = 0; i < m; i++) {
+                        matrix[i][j] = 0;
+                    }
+                }
+            }
+        }
+    }
+    ```
+
+    ***进阶思路***
+
+    直观上可以使用两个数组来标记行和列出现 0 的情况，但这样空间复杂度就是 *O(m+n)* 了，不符合题意。
+
+    考虑使用数组原本的元素进行记录出现 0 的情况。
+
+    1.  设定两个变量 ***flag_row0***、***flag_col0*** 来标记第一行、第一列是否出现了 0。
+    2.  接下来我们使用数组第一行、第一列来标记 0 的情况。
+    3.  对数组除第一行、第一列之外的每个元素进行遍历，如果某个元素出现 0 了，则使用数组的第一行、第一列对应位置来存储 0 的标记。
+    4.  再对数组除第一行、第一列之外的每个元素进行遍历，通过对第一行、第一列的标记 0 情况，进行置为 0 的操作。
+    5.  最后再根据 ***flag_row0***、***flag_col0***的标记情况，对第一行、第一列进行置为 0 的操作。
+
+    ***总结***：<u>说实话没想到可以直接在原数组上操作。</u>
+
+-   [59. 螺旋矩阵 II](https://leetcode.cn/problems/spiral-matrix-ii/)
+
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/01/29 11:02
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/spiral-matrix-ii/description/
+     * 题目：59. 螺旋矩阵 II
+     * 难度：medium
+     * Thinking：_6_min
+     * Coding:_6_min
+     * 思路：思路同[54. 螺旋矩阵]，边界指针 + 状态机
+     * 卡点：
+     */
+    public class Lc0059 {
+        public int[][] generateMatrix(int n) {
+            int[][] ans = new int[n][n];
+            int t = 0, l = 0, r = n - 1, b = n - 1;
+            int k = 1;
+            int cntStat = 0;
+            while (t <= b && l <= r) {
+                switch (cntStat) {
+                    case 0: {
+                        for (int j = l; j <= r; j++) {
+                            ans[t][j] = k;
+                            k++;
+                        }
+                        t++;
+                        break;
+                    }
+                    case 1: {
+                        for (int i = t; i <= b; i++) {
+                            ans[i][r] = k;
+                            k++;
+                        }
+                        r--;
+                        break;
+                    }
+                    case 2: {
+                        for (int j = r; j >= l; j--) {
+                            ans[b][j] = k;
+                            k++;
+                        }
+                        b--;
+                        break;
+                    }
+                    case 3: {
+                        for (int i = b; i >= t; i--) {
+                            ans[i][l] = k;
+                            k++;
+                        }
+                        l++;
+                        break;
+                    }
+                }
+                cntStat = (cntStat + 1) % 4;
+            }
+            return ans;
+        }
+    }
+    ```
+
+-   [289. 生命游戏](https://leetcode.cn/problems/game-of-life/)
+
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/01/29 11:35
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/game-of-life/description/
+     * 题目：289. 生命游戏
+     * 难度：medium
+     * Thinking：_5_min
+     * Coding:_7_min
+     * 思路：使用O(m*n)空间复杂度，很容易解决；
+     * 进阶思路是将原数组两次刷新，因需要记录原状态和新状态，故更新值。
+     * 第一次刷新：  2表示原值是0，且不需要更新成1；4表示原值是0，且需要更新成1；
+     * 3表示原值是1，且不需要更新成0；5表示原值是1，且需要更新成0。
+     * 第二次刷新：  将元素2和5，更新成0；3和4更新成1。
+     * 卡点：
+     */
+    public class Lc0289 {
+        public void gameOfLife(int[][] board) {
+            int m = board.length;
+            int n = board[0].length;
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    board[i][j] = calculate(board, i, j, m, n);
+                }
+            }
+    
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    switch (board[i][j]) {
+                        case 2:
+                        case 5: {
+                            board[i][j] = 0;
+                            break;
+                        }
+                        case 3:
+                        case 4: {
+                            board[i][j] = 1;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    
+        private int calculate(int[][] board, final int i, final int j, final int m, final int n) {
+            int ans = 0;
+            if (i - 1 >= 0 && j - 1 >= 0 && board[i - 1][j - 1] % 2 == 1) ans++;
+            if (i - 1 >= 0 && board[i - 1][j] % 2 == 1) ans++;
+            if (i - 1 >= 0 && j + 1 < n && board[i - 1][j + 1] % 2 == 1) ans++;
+    
+            if (j - 1 >= 0 && board[i][j - 1] % 2 == 1) ans++;
+            if (j + 1 < n && board[i][j + 1] % 2 == 1) ans++;
+    
+            if (i + 1 < m && j - 1 >= 0 && board[i + 1][j - 1] % 2 == 1) ans++;
+            if (i + 1 < m && board[i + 1][j] % 2 == 1) ans++;
+            if (i + 1 < m && j + 1 < n && board[i + 1][j + 1] % 2 == 1) ans++;
+    
+            if (ans < 2) {
+                if (board[i][j] == 0) return 2;
+                else return 5;
+            } else if (ans > 3) {
+                if (board[i][j] == 0) return 2;
+                else return 5;
+            } else if (ans == 3) {
+                if (board[i][j] == 0) return 4;
+                else return 3;
+            } else {
+                if (board[i][j] == 0) return 2;
+                else return 3;
+            }
+        }
+    }
+    ```
+
+## 数组排序
+
+
 
 -   
-
+-   
+-   
+-   
 -   
 
