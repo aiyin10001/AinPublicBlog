@@ -1,6 +1,5 @@
 +++
 date = '2025-12-15T09:56:10+08:00'
-draft = true
 title = 'RN基础之叁'
 readingTime = true
 description = '记录自己学习RN的基础组件'
