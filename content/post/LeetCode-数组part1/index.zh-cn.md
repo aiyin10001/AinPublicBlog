@@ -17,6 +17,8 @@ image="tu.png"
 
 ## 数组基础 （一维数组、二维数组）
 
+### 数组基础 （一维数组、二维数组）题目列表
+
 - [0066. 加一 - 力扣](https://leetcode.cn/problems/plus-one/)
 
     ```java
@@ -812,27 +814,30 @@ image="tu.png"
     /**
      * 堆排序
      */
-    public void maxHeapSort(int[] nums, int l, int r) {
-        buildMaxHeap(nums, l, r);
-        for (int i = 0; i <= r; i++) {
+    public void maxHeapSort(int[] nums) {
+        if (nums.length < 2) return;
+        buildHeap(nums);
+        for (int i = 0; i < nums.length; i++) {
             var tmp = nums[0];
-            nums[0] = nums[r - i];
-            nums[r - i] = tmp;
-            shiftMaxHeap(nums, l, r - i - 1);
+            nums[0] = nums[nums.length - i - 1];
+            nums[nums.length - i - 1] = tmp;
+
+            shiftHeap(nums, 0, nums.length - i - 2);
         }
     }
 
-    public void buildMaxHeap(int[] nums, int l, int r) {
-        int target = (l + r) / 2;
-        for (; target >= 0; target--) {
-            shiftMaxHeap(nums, target, r);
+    private void buildHeap(int[] nums) {
+        var len = nums.length;
+        var mid = len / 2 - 1;
+        for (int i = mid; i >= 0; i--) {
+            shiftHeap(nums, i, nums.length - 1);
         }
     }
 
-    public void shiftMaxHeap(int[] nums, int l, int r) {
-        var i = l;
+    private void shiftHeap(int[] nums, int l, int r) {
+        int i = l;
         while (i < r) {
-            var k = 2 * (i + 1) - 1;
+            int k = 2 * i + 1;
             if (k + 1 <= r && nums[k] < nums[k + 1]) k = k + 1;
             if (k <= r && nums[i] < nums[k]) {
                 var tmp = nums[i];
@@ -878,35 +883,479 @@ image="tu.png"
 ### 桶排序
 
 ```java
+    /**
+     * 桶排序
+     */
+    public void bucketSort(int[] nums, final int bucketCount) {
+        var min = nums[0];
+        var max = nums[0];
+        for (int i = 0; i < nums.length; i++) {
+            min = Math.min(min, nums[i]);
+            max = Math.max(max, nums[i]);
+        }
+        var range = max - min + 1;
+        var bucketRange = range / bucketCount + 1;
+        ArrayList<Integer>[] bucketList = new ArrayList[bucketRange];
+        for (int num : nums) {
+            var number = (num - min) / bucketCount;
+            if (bucketList[number] == null) {
+                bucketList[number] = new ArrayList<>();
+            }
+            bucketList[number].add(num);
+        }
+        for (ArrayList<Integer> integers : bucketList) {
+            if (integers != null) {
+                integers.sort((Comparator.comparingInt(o -> o)));
+            }
+        }
+        int k = 0;
+        for (ArrayList<Integer> integers : bucketList) {
+            if (integers != null) {
+                for (Integer integer : integers) {
+                    nums[k] = integer;
+                    k++;
+                }
+            }
+        }
+    }
 ```
 
+### 基数排序
 
+```java
+    /**
+     * 基数排序
+     */
+    public void radixSort(int[] nums) {
+        var str = String.valueOf(nums[0]);
+        var len = str.length();
+        for (int i = 0; i < len; i++) {
+            ArrayList<Integer>[] bucketList = new ArrayList[10];
+            for (int num : nums) {
+                var b = (num / (int) (Math.pow(10, i))) % 10;
+                if (bucketList[b] == null) bucketList[b] = new ArrayList<>();
+                bucketList[b].add(num);
+            }
+            int k = 0;
+            for (ArrayList<Integer> integers : bucketList) {
+                if (integers != null) {
+                    for (Integer integer : integers) {
+                        nums[k] = integer;
+                        k++;
+                    }
+                }
+            }
+        }
+    }
+```
 
+### 数组排序题目列表
 
+-   [912. 排序数组](https://leetcode.cn/problems/sort-an-array/)
 
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/01/30 11:41
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/sort-an-array/description/
+     * 题目：912. 排序数组
+     * 难度：medium
+     * Thinking：_1_min
+     * Coding:_10_min
+     * 思路：堆排序
+     * 卡点：堆排序调整函数，记得i下标更新为k，而不是左孩子
+     */
+    public class Lc0912 {
+        public int[] sortArray(int[] nums) {
+            maxHeapSort(nums);
+            return nums;
+        }
+    
+        public void maxHeapSort(int[] nums) {
+            if (nums.length < 2) return;
+            buildHeap(nums);
+            for (int i = 0; i < nums.length; i++) {
+                var tmp = nums[0];
+                nums[0] = nums[nums.length - i - 1];
+                nums[nums.length - i - 1] = tmp;
+    
+                shiftHeap(nums, 0, nums.length - i - 2);
+            }
+        }
+    
+        private void buildHeap(int[] nums) {
+            var len = nums.length;
+            var mid = len / 2 - 1;
+            for (int i = mid; i >= 0; i--) {
+                shiftHeap(nums, i, nums.length - 1);
+            }
+        }
+    
+        private void shiftHeap(int[] nums, int l, int r) {
+            int i = l;
+            while (i < r) {
+                int k = 2 * i + 1;
+                if (k + 1 <= r && nums[k] < nums[k + 1]) k = k + 1;
+                if (k <= r && nums[i] < nums[k]) {
+                    var tmp = nums[i];
+                    nums[i] = nums[k];
+                    nums[k] = tmp;
+                    i = k;
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+    ```
 
+-   [LCR 164. 破解闯关密码](https://leetcode.cn/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof/)
 
+    ```java
+    package org.lc;
+    
+    import java.util.ArrayList;
+    import java.util.List;
+    
+    /**
+     * 创建时间: 2026/01/30 14:51
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof/description/
+     * 题目：LCR 164. 破解闯关密码
+     * 难度：medium
+     * Thinking：_3_min
+     * Coding:_5_min
+     * 思路：排序，比较逻辑是按高位比较，相同则比较次高位
+     * 卡点：比较逻辑直接比较：o1o2和o2o1的大小，判断o1和o2那个大，忘记String.compareTo函数了。
+     */
+    public class LcLCR0164 {
+        public String crackPassword(int[] password) {
+            List<String> pas = new ArrayList<String>();
+            for (int pass : password) {
+                pas.add(String.valueOf(pass));
+            }
+            pas.sort((o1, o2) -> (o1 + o2).compareTo(o2 + o1));
+    
+            StringBuilder ans = new StringBuilder();
+            for (String pa : pas) {
+                ans.append(pa);
+            }
+            return ans.toString();
+        }
+    }
+    ```
 
+    ***思考***：
 
+    本质上是数组排序。假设 *x*、*y* 是数组 *nums*中的两个元素。则排序的判断规则如下所示：
 
+    1.   如果拼接字符串 x+y>y+x，则 *x* 大于 *y*，*y* 应该排在 *x* 前面，从而使拼接起来的数字尽可能的小;
+    2.   反之，如果拼接字符串 x+y<y+x，则 *x* 小于 *y*，*x* 应该排在 *y* 前面，从而使拼接起来的数字尽可能的小。
+    
+-   [283. 移动零](https://leetcode.cn/problems/move-zeroes/)
 
+    两个思路：
 
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/01/30 15:36
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/move-zeroes/description/
+     * 题目：283. 移动零
+     * 难度：easy
+     * Thinking：_1_min
+     * Coding:_3_min
+     * 思路：思路1:稳定的排序算法，比较逻辑是0>非0，但是时间复杂度为O(n^2)。
+     * 卡点：
+     */
+    public class Lc0283 {
+        public void moveZeroes(int[] nums) {
+            for (int i = 0; i < nums.length; i++) {
+                var tmp = false;
+                for (int j = 0; j < nums.length - i - 1; j++) {
+                    if (nums[j] == 0 && nums[j + 1] != 0) {
+                        var t = nums[j];
+                        nums[j] = nums[j + 1];
+                        nums[j + 1] = t;
+                        tmp = true;
+                    }
+                }
+                if (!tmp) break;
+            }
+        }
+    }
+    ```
 
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/01/30 16:00
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/move-zeroes/description/
+     * 题目：283. 移动零
+     * 难度：easy
+     * Thinking：_2_min
+     * Coding:_3_min
+     * 思路：思路2:使用双指针，给剩下的位置赋值0。
+     * 卡点：
+     */
+    public class Lc0283_ {
+        public void moveZeroes(int[] nums) {
+            int i = 0, j = 0;
+            while (j < nums.length) {
+                if (nums[j] != 0) {
+                    nums[i] = nums[j];
+                    i++;
+                }
+                j++;
+            }
+            while (i < nums.length) {
+                nums[i] = 0;
+                i++;
+            }
+        }
+    }
+    ```
+    
+-   [506. 相对名次](https://leetcode.cn/problems/relative-ranks/)
 
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/01/30 16:08
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/relative-ranks/
+     * 题目：506. 相对名次
+     * 难度：easy
+     * Thinking：_1_min
+     * Coding:__min
+     * 思路：构建下标数组，联同下标数组一同排序。
+     * 卡点：
+     */
+    public class Lc0506 {
+        public String[] findRelativeRanks(int[] score) {
+            String[] ans = new String[score.length];
+            int[] index = new int[score.length];
+            for (int i = 0; i < index.length; i++) index[i] = i;
+            quickSort(score, index, 0, score.length - 1);
+            for (int i = 0; i < index.length; i++) {
+                ans[index[i]] = String.valueOf(index.length - i);
+            }
+            if (index.length - 1 >= 0) {
+                ans[index[index.length - 1]] = "Gold Medal";
+            }
+            if (index.length - 2 >= 0) {
+                ans[index[index.length - 2]] = "Silver Medal";
+            }
+            if (index.length - 3 >= 0) {
+                ans[index[index.length - 3]] = "Bronze Medal";
+            }
+            return ans;
+        }
+    
+        /**
+         * 快速排序
+         */
+        public void quickSort(int[] nums, int[] index, int l, int r) {
+            if (l >= r) return;
+            var p = partition(nums, index, l, r);
+            quickSort(nums, index, l, p - 1);
+            quickSort(nums, index, p + 1, r);
+        }
+    
+        private int partition(int[] nums, int[] index, int l, int r) {
+            var key = nums[l];
+            var in = index[l];
+            while (l < r) {
+                while (key <= nums[r] && l < r) r--;
+                nums[l] = nums[r];
+                index[l] = index[r];
+                while (key >= nums[l] && l < r) l++;
+                nums[r] = nums[l];
+                index[r] = index[l];
+            }
+            nums[l] = key;
+            index[l] = in;
+            return l;
+        }
+    }
+    ```
+    
+-   [88. 合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
 
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/01/30 16:29
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/merge-sorted-array/description/
+     * 题目：88. 合并两个有序数组
+     * 难度：easy
+     * Thinking：_2_min
+     * Coding:_6_min
+     * 思路：归并排序基础，差异点在于合并到nums1，先将nums1元素后移，然后在nums1上操作即可。
+     * 卡点：
+     */
+    public class Lc0088 {
+        public void merge(int[] nums1, int m, int[] nums2, int n) {
+            for (int i = 0; i < m; i++) {
+                nums1[m + n - 1 - i] = nums1[m - 1 - i];
+            }
+            int i1 = n;
+            int i2 = 0;
+            int cnt = 0;
+            while (i1 < m + n && i2 < n) {
+                if (nums1[i1] <= nums2[i2]) {
+                    nums1[cnt] = nums1[i1];
+                    cnt++;
+                    i1++;
+                } else {
+                    nums1[cnt] = nums2[i2];
+                    cnt++;
+                    i2++;
+                }
+            }
+    
+            if (i1 >= m + n) {
+                while (i2 < n) {
+                    nums1[cnt] = nums2[i2];
+                    cnt++;
+                    i2++;
+                }
+            }
+            if (i2 >= n) {
+                while (i1 < m + n) {
+                    nums1[cnt] = nums1[i1];
+                    cnt++;
+                    i1++;
+                }
+            }
+        }
+    }
+    ```
 
+    ***思考***：
 
+    另一种思路是反着排，从右向左逆序排即可。
 
+    ***[快慢指针]***
 
+    1.  将两个指针 `index1`、`index2`分别指向 `nums1`、`nums2`数组的尾部，再用一个指针 `index`指向数组 `nums1`的尾部。
+    2.  从后向前判断当前指针下` nums1[index1]` 和 `nums[index2]`的值大小，将较大值存入` num1[index]`中，然后继续向前遍历。
+    3.  最后再将 `nums2` 中剩余元素赋值到 `num1`前面对应位置上。
+    
+-   [169. 多数元素](https://leetcode.cn/problems/majority-element/)
 
+    ```java
+    package org.lc;
+    
+    import java.util.HashMap;
+    
+    /**
+     * 创建时间: 2026/01/30 16:58
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/majority-element/description/
+     * 题目：169. 多数元素
+     * 难度：easy
+     * Thinking：_1_min
+     * Coding:__min
+     * 思路：用map解题。
+     * 卡点：原题目有有问题，对于长为奇数的数组，大于一半（向下取整）时，可能有两个值。
+     */
+    public class Lc0169 {
+        public int majorityElement(int[] nums) {
+            var map = new HashMap<Integer, Integer>();
+            var ans = -1;
+            for (int num : nums) {
+                if (map.containsKey(num)) {
+                    map.put(num, map.get(num) + 1);
+                } else {
+                    map.put(num, 1);
+                }
+            }
+    
+            var count = -1;
+            for (Integer key : map.keySet()) {
+                if (map.get(key) > count) {
+                    count = map.get(key);
+                    ans = key;
+                }
+            }
+            return ans;
+        }
+    }
+    ```
 
+    小小easy，竟然有5种解法，分治和投票计数法真没想到。
+    
+-   [LCR 159. 库存管理 III](https://leetcode.cn/problems/zui-xiao-de-kge-shu-lcof/)
 
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/01/30 18:05
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/zui-xiao-de-kge-shu-lcof/
+     * 题目：LCR 159. 库存管理 III
+     * 难度：easy
+     * Thinking：_1_min
+     * Coding:_5_min
+     * 思路：小顶堆，堆排序，输出前cnt个结果。
+     * 卡点：
+     */
+    public class LcLCR0159 {
+        public int[] inventoryManagement(int[] stock, int cnt) {
+            var ans = new int[cnt];
+            buildHeap(stock);
+            for (int i = 0; i < cnt; i++) {
+                ans[i] = stock[0];
+                stock[0] = stock[stock.length - 1 - i];
+                shiftHeap(stock, 0, stock.length - 1 - i - 1);
+            }
+            return ans;
+        }
+    
+        private void buildHeap(int[] nums) {
+            var mid = nums.length / 2 - 1;
+            for (int i = mid; i >= 0; i--) {
+                shiftHeap(nums, i, nums.length - 1);
+            }
+        }
+    
+        private void shiftHeap(int[] nums, final int l, final int r) {
+            var i = l;
+            while (i <= r) {
+                var k = (i + 1) * 2 - 1;
+                if (k + 1 <= r && nums[k] > nums[k + 1]) k++;
+                if (k <= r && nums[i] > nums[k]) {
+                    var tmp = nums[i];
+                    nums[i] = nums[k];
+                    nums[k] = tmp;
+                    i = k;
+                } else break;
+            }
+        }
+    }
+    ```
 
-
+    ***思考***
+    还有一种参考快排到策略，可参考[题解](https://leetcode.cn/problems/zui-xiao-de-kge-shu-lcof/solutions/159342/zui-xiao-de-kge-shu-by-leetcode-solution/)。
 
 -   
+
 -   
+
 -   
+
 -   
+
 -   
 
