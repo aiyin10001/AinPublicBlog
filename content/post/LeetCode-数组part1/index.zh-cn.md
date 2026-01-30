@@ -1349,13 +1349,5 @@ image="tu.png"
     ***思考***
     还有一种参考快排到策略，可参考[题解](https://leetcode.cn/problems/zui-xiao-de-kge-shu-lcof/solutions/159342/zui-xiao-de-kge-shu-by-leetcode-solution/)。
 
--   
-
--   
-
--   
-
--   
-
--   
+    
 
