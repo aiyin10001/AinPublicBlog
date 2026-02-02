@@ -951,6 +951,8 @@ image="tu.png"
 
 ### 数组排序题目列表
 
+#### Easy
+
 -   [912. 排序数组](https://leetcode.cn/problems/sort-an-array/)
 
     ```java
@@ -1349,5 +1351,535 @@ image="tu.png"
     ***思考***
     还有一种参考快排到策略，可参考[题解](https://leetcode.cn/problems/zui-xiao-de-kge-shu-lcof/solutions/159342/zui-xiao-de-kge-shu-by-leetcode-solution/)。
 
+
+-   [1122. 数组的相对排序](https://leetcode.cn/problems/relative-sort-array/)
+
+    ```java
+    package org.lc;
     
+    /**
+     * 创建时间: 2026/02/02 10:03
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/relative-sort-array/description/
+     * 题目：1122. 数组的相对排序
+     * 难度：easy
+     * Thinking：_5_min
+     * Coding:_11_min
+     * 思路：观察数组长度和元素值域都在1k以内，使用计数排序，优先过滤arr2，然后排序arr1。
+     * 卡点：
+     */
+    public class Lc1122 {
+        public int[] relativeSortArray(int[] arr1, int[] arr2) {
+            var min = arr1[0];
+            var max = arr1[0];
+            for (int j : arr1) {
+                min = Math.min(min, j);
+                max = Math.max(max, j);
+            }
+    
+            var count = new int[max - min + 1];
+            for (int m : arr1) {
+                count[m - min]++;
+            }
+    
+            int[] ans = new int[arr1.length];
+            int k = 0;
+            for (int n : arr2) {
+                for (int i = 0; i < count[n - min]; i++) {
+                    ans[k] = n;
+                    k++;
+                }
+                count[n - min] = 0;
+            }
+    
+            for (int i = 0; i < count.length; i++) {
+                for (int j = 0; j < count[i]; j++) {
+                    ans[k] = i + min;
+                    k++;
+                }
+            }
+    
+            return ans;
+        }
+    }
+    ```
+
+-   [561. 数组拆分](https://leetcode.cn/problems/array-partition/)
+
+    ```java
+    package org.lc;
+    
+    import java.util.Arrays;
+    
+    /**
+     * 创建时间: 2026/02/02 10:32
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/array-partition/description/
+     * 题目：561. 数组拆分
+     * 难度：easy
+     * Thinking：_2_min
+     * Coding:_1_min
+     * 思路：排序后，记a0 …… a2n-1，
+     * 比较 min(a2n-1,a2n-2)+min(a2n-3,a2n-4)=(a2n-2)+(a2n-4)
+     * min(a2n-1,a2n-4)+min(a2n-3,a2n-2)=(a2n-4)+(a2n-3)
+     * 显然前者大，所以将排序后，奇数编号累加。
+     * 卡点：
+     */
+    public class Lc0561 {
+        public int arrayPairSum(int[] nums) {
+            Arrays.sort(nums);
+            int ans = 0;
+            for (int i = 0; i < nums.length; i = i + 2) {
+                ans += nums[i];
+            }
+            return ans;
+        }
+    }
+    ```
+
+    ***其他思路***
+
+    **计数排序**
+
+    因为 `nums[i]`的范围为 [−10^4^, 10^4^]，范围不是很大，所以可以使用计数排序算法先将数组 `nums`进行排序。
+
+    要想每对数最小值的总和最大，就得使每对数的最小值尽可能大。只有让较大的数与较大的数一起组合，较小的数与较小的数一起结合，才能才能使总和最大。所以，排序完之后将相邻两个元素的最小值进行相加，即得到结果。
+
+-   [217. 存在重复元素](https://leetcode.cn/problems/contains-duplicate/)
+
+    ```java
+    package org.lc;
+    
+    import java.util.Arrays;
+    
+    /**
+     * 创建时间: 2026/02/02 10:50
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/contains-duplicate/description/
+     * 题目：217. 存在重复元素
+     * 难度：easy
+     * Thinking：_1_min
+     * Coding:_1_min
+     * 思路：排序检查相邻元素。
+     * 卡点：
+     */
+    public class Lc0217 {
+        public boolean containsDuplicate(int[] nums) {
+            Arrays.sort(nums);
+            for (int i = 1; i < nums.length; i++) {
+                if (nums[i - 1] == nums[i]) return true;
+            }
+            return false;
+        }
+    }
+    ```
+
+    ***其他思路***
+
+    使用HashSet统计。
+
+-   [136. 只出现一次的数字](https://leetcode.cn/problems/single-number/)
+
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/02/02 10:59
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/single-number/description/
+     * 题目：136. 只出现一次的数字
+     * 难度：easy
+     * Thinking：_1_min
+     * Coding:_1_min
+     * 思路：可以直接使用排序算法或者HashSet解决解决，但是不满足时间复杂度O(n)空间复杂度O(1)解决。
+     *      查看题解后，发现是位运算。
+     * 卡点：没有想到位运算解决。
+     */
+    public class Lc0136 {
+        public int singleNumber(int[] nums) {
+            var ans = 0;
+            for (int num : nums) {
+                ans = ans ^ num;
+            }
+            return ans;
+        }
+    }
+    ```
+
+#### Medium
+
+
+-   [215. 数组中的第K个最大元素](https://leetcode.cn/problems/kth-largest-element-in-an-array/)
+
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/02/02 14:18
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/kth-largest-element-in-an-array/description/
+     * 题目：215. 数组中的第K个最大元素
+     * 难度：medium
+     * Thinking：_1_min
+     * Coding:_10_min
+     * 思路：用堆排序解决该问题，但是不太满足题目要求。
+     * 卡点：
+     */
+    public class Lc0215 {
+        public int findKthLargest(int[] nums, int k) {
+            buildHeap(nums);
+            for (int i = 0; i < nums.length; i++) {
+                var tmp = nums[0];
+                nums[0] = nums[nums.length - 1 - i];
+                nums[nums.length - 1 - i] = tmp;
+                shiftHeap(nums, 0, nums.length - i - 2);
+            }
+            return nums[nums.length - k];
+        }
+    
+        private void buildHeap(int[] nums) {
+            for (int i = nums.length / 2 - 1; i >= 0; i--) {
+                shiftHeap(nums, i, nums.length - 1);
+            }
+        }
+    
+        private void shiftHeap(int[] nums, int l, int r) {
+            int i = l;
+            var key = nums[i];
+            while (i <= r) {
+                int k = 2 * i + 1;
+                if (k + 1 <= r && nums[k] < nums[k + 1]) k++;
+                if (k <= r && key < nums[k]) {
+                    nums[i] = nums[k];
+                    i = k;
+                } else {
+                    break;
+                }
+            }
+            nums[i] = key;
+        }
+    
+    }
+    ```
+
+    ***思路***
+
+    -   **快速排序**
+
+    使用快速排序在每次调整时，都会确定一个元素的最终位置，且以该元素为界限，将数组分成了左右两个子数组，左子数组中的元素都比该元素小，右子树组中的元素都比该元素大。
+
+    这样，只要某次划分的元素恰好是第 k个下标就找到了答案。并且只需关注第 k个最大元素所在区间的排序情况，与第 k*k* 个最大元素无关的区间排序都可以忽略。这样进一步减少了执行步骤。
+
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/02/02 15:18
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/kth-largest-element-in-an-array/
+     * 题目：215. 数组中的第K个最大元素
+     * 难度：medium
+     * Thinking：_1_min
+     * Coding:_8_min
+     * 思路：快排分治的思路，不用完整排列，只需要选择位置即可。
+     * 卡点：
+     */
+    public class Lc0215_ {
+        public int findKthLargest(int[] nums, int k) {
+            return findK(nums, 0, nums.length - 1, k);
+        }
+    
+        private int findK(int[] nums, int l, int h, int k) {
+            int p = partition(nums, l, h);
+            if (p == nums.length - k) {
+                return nums[p];
+            } else if (p < nums.length - k) {
+                return findK(nums, p + 1, h, k);
+            } else {
+                return findK(nums, l, p - 1, k);
+            }
+        }
+    
+        private int partition(int[] nums, int l, int h) {
+            int key = nums[l];
+            while (l < h) {
+                while (l < h && key <= nums[h]) h--;
+                nums[l] = nums[h];
+                while (l < h && nums[l] <= key) l++;
+                nums[h] = nums[l];
+            }
+            nums[l] = key;
+            return l;
+        }
+    }
+    ```
+
+    -   **优先队列**
+
+    1.   遍历数组元素，对于当前元素 num：
+         1.  如果优先队列中的元素个数小于 k个，则将当前元素 num放入优先队列中。
+         2.  如果优先队列中的元素个数大于等于 k个，并且当前元素 num大于优先队列的队头元素，则弹出队头元素，并将当前元素 num插入到优先队列中。
+
+    2.   遍历完，此时优先队列的队头元素就是第 k个最大元素，将其弹出并返回即可。
+
+-   [75. 颜色分类](https://leetcode.cn/problems/sort-colors/)
+
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/02/02 15:37
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/sort-colors/description/
+     * 题目：75. 颜色分类
+     * 难度：medium
+     * Thinking：_1_min
+     * Coding:_3_min
+     * 思路：计数排序
+     * 卡点：
+     */
+    public class Lc0075 {
+        public void sortColors(int[] nums) {
+            int[] count = new int[3];
+            for (int num : nums) {
+                count[num]++;
+            }
+            int k = 0;
+            for (int i = 0; i < count.length; i++) {
+                while (count[i] > 0) {
+                    nums[k] = i;
+                    k++;
+                    count[i]--;
+                }
+            }
+        }
+    }
+    ```
+
+    ***其他思路***
+
+    双指针 + 快速排序思想
+
+-   [164. 最大间距](https://leetcode.cn/problems/maximum-gap/)
+
+    ```java
+    package org.lc;
+    
+    import java.util.Arrays;
+    
+    /**
+     * 创建时间: 2026/02/02
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/maximum-gap/description/
+     * 题目：164. 最大间距
+     * 难度：medium
+     * Thinking：_4_min
+     * Coding:_2_min
+     * 思路：没有时间O(n)、空间O(n)复杂度的解题思路，只会排序后比较。
+     * 卡点：解题思路是基数排序、桶排序，实际上没有sort速度快。
+     */
+    public class Lc0164 {
+        public int maximumGap(int[] nums) {
+            Arrays.sort(nums);
+            var ans = 0;
+            for (int i = 1; i < nums.length; i++) {
+                ans = Math.max(ans, nums[i] - nums[i - 1]);
+            }
+            return ans;
+        }
+    }
+    ```
+
+-   [56. 合并区间](https://leetcode.cn/problems/merge-intervals/)
+
+    ```java
+    package org.lc;
+    
+    import java.util.ArrayList;
+    import java.util.Arrays;
+    import java.util.Comparator;
+    import java.util.List;
+    
+    /**
+     * 创建时间: 2026/02/02
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/merge-intervals/description/
+     * 题目：56. 合并区间
+     * 难度：medium
+     * Thinking：_2_min
+     * Coding:_11_min
+     * 思路：能想到的两个思路，分别是排序和线段树，但真不会写线段树，就用排序解吧。
+     * 卡点：
+     */
+    public class Lc0056 {
+        public int[][] merge(int[][] intervals) {
+            Arrays.sort(intervals, Comparator.comparingInt(o -> o[0]));
+            List<int[]> ansList = new ArrayList<>();
+            int j = 0;
+            while (j < intervals.length) {
+                if (j + 1 < intervals.length && intervals[j + 1][0] <= intervals[j][1]) {
+                    intervals[j + 1] = new int[]{intervals[j][0], Math.max(intervals[j + 1][1], intervals[j][1])};
+                } else {
+                    ansList.add(intervals[j]);
+                }
+                j++;
+            }
+            return ansList.toArray(new int[0][0]);
+        }
+    }
+    ```
+
+-   [179. 最大数](https://leetcode.cn/problems/largest-number/)
+
+    ```java
+    package org.lc;
+    
+    import java.util.ArrayList;
+    import java.util.List;
+    
+    /**
+     * 创建时间: 2026/02/02
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/largest-number/description/
+     * 题目：179. 最大数
+     * 难度：medium
+     * Thinking：_1_min
+     * Coding:_15_min
+     * 思路：排序，思路类似 https://leetcode.cn/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof/
+     * 卡点：
+     */
+    public class Lc0179 {
+        public String largestNumber(int[] nums) {
+            List<String> numList = new ArrayList<>();
+            for (int num : nums) {
+                numList.add(String.valueOf(num));
+            }
+            numList.sort((o1, o2) -> (o2 + o1).compareTo(o1 + o2));
+            if (numList.get(0).equals("0")) return "0";
+            var ans = new StringBuilder();
+            for (String s : numList) {
+                ans.append(s);
+            }
+            return ans.toString();
+        }
+    }
+    ```
+
+    stream写法
+
+    ```java
+    package org.lc;
+    
+    import java.util.Arrays;
+    import java.util.stream.Collectors;
+    
+    /**
+     * 创建时间: 2026/02/02
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/largest-number/description/
+     * 题目：179. 最大数
+     * 难度：medium
+     * Thinking：_1_min
+     * Coding:_1_min
+     * 思路：排序，思路类似 https://leetcode.cn/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof/
+     * 卡点：
+     */
+    public class Lc0179 {
+        public String largestNumber(int[] nums) {
+            String ans =
+                    Arrays.stream(nums)
+                            .mapToObj(String::valueOf)
+                            .sorted((o1, o2) -> (o2 + o1).compareTo(o1 + o2))
+                            .collect(Collectors.joining());
+            return ans.charAt(0) == '0' ? "0" : ans;
+        }
+    }
+    ```
+
+#### Hard
+
+
+-   [LCR 170. 交易逆序对的总数](https://leetcode.cn/problems/shu-zu-zhong-de-ni-xu-dui-lcof/)
+
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/02/02
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/shu-zu-zhong-de-ni-xu-dui-lcof/description/
+     * 题目：LCR 170. 交易逆序对的总数
+     * 难度：hard
+     * Thinking：_1_min
+     * Coding:_2_min
+     * 思路：先试下枚举,果然超时了。
+     * 卡点：
+     */
+    public class LcLCR0170 {
+        public int reversePairs(int[] record) {
+            int ans = 0;
+            for (int i = 0; i < record.length - 1; i++) {
+                for (int j = i + 1; j < record.length; j++) {
+                    if (record[i] > record[j]) {
+                        ans++;
+                    }
+                }
+            }
+            return ans;
+        }
+    }
+    ```
+
+-   [315. 计算右侧小于当前元素的个数](https://leetcode.cn/problems/count-of-smaller-numbers-after-self/)
+
+    ```java
+    package org.lc;
+    
+    import java.util.List;
+    
+    /**
+     * 创建时间: 2026/02/02
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/count-of-smaller-numbers-after-self/description/
+     * 题目：315. 计算右侧小于当前元素的个数
+     * 难度：hard
+     * Thinking：_1_min
+     * Coding:__min
+     * 思路：思路类似https://leetcode.cn/problems/shu-zu-zhong-de-ni-xu-dui-lcof/description/，暂时搞不来。
+     * 卡点：
+     */
+    public class Lc0315 {
+        public List<Integer> countSmaller(int[] nums) {
+            return null;
+        }
+    }
+    ```
+
+-   [220. 存在重复元素 III](https://leetcode.cn/problems/contains-duplicate-iii/)
+
+    ```java
+    package org.lc;
+    
+    /**
+     * 创建时间: 2026/02/02
+     * 作者: Ain
+     * 链接：https://leetcode.cn/problems/contains-duplicate-iii/description/
+     * 题目：220. 存在重复元素 III
+     * 难度：hard
+     * Thinking：__min
+     * Coding:__min
+     * 思路：综合题目，暂解题。
+     * 卡点：
+     */
+    public class Lc0220 {
+        public boolean containsNearbyAlmostDuplicate(int[] nums, int indexDiff, int valueDiff) {
+            return false;
+        }
+    }
+    ```
+
+    
+
+
+
 
